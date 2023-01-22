@@ -11,19 +11,19 @@ profile:
 
 social: true  # includes social icons at the bottom of the page
 news: true  # includes a list of news items
-selected_papers: true # includes a list of papers marked as "selected={true}"
+selected_papers: false # includes a list of papers marked as "selected={true}"
 ---
 
 
-I am an Economist turned programmer and about to finish my PhD at the University of
-Bonn. I love building complex models of human behavior to analyze policy relevant
-questions. Applications range from [structural econometrics](https://arxiv.org/abs/2103.01115) to [epidemiology](https://arxiv.org/abs/2106.11129).
+Hi! My name is Janoś, I am an economist and open-source contributor.
 
+I have a passion for using and creating good tools. A few years ago, I started
+[estimagic](https://estimagic.readthedocs.io/en/stable/), a package for difficult numerical optimization problems.
 
-Over time, I have authored several open source Python packages. The most popular is
-[estimagic](https://estimagic.readthedocs.io/en/stable/), a library for numerical
-optimization and calibration of scientific models. I am also an active member of the
-[Open Source Economics](https://open-econ.org/) initiative.
+In my next project, I am exploring how AI can change the way researchers from academia and
+industry learn from data. I want to work on the next generation of tools that make empirical research faster and more reproducible.
 
-In my free time I build pizza ovens, bandsaws or furniture and enjoy long bike rides.
+I teach "Effective Programming Practices for Economists" and "Scientific Computing" at the University of Bonn.
+
+When I am not working, I enjoy building pizza ovens, bandsaws, and furniture.
 
