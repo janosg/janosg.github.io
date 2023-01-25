@@ -5,7 +5,7 @@ permalink: /projects/
 description: A growing collection of software and construction projects.
 nav: true
 nav_order: 1
-display_categories: [work, fun]
+display_categories: false # [work, fun]
 horizontal: false
 ---
 

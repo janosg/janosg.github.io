@@ -17,7 +17,7 @@ selected_papers: false # includes a list of papers marked as "selected={true}"
 
 Hi! My name is Janoś, I am an economist and open-source contributor.
 
-I have a passion for using and creating good tools. A few years ago, I started
+I have a passion for using and creating tools. A few years ago, I started
 [estimagic](https://estimagic.readthedocs.io/en/stable/), a package for difficult numerical optimization problems.
 
 In my next project, I am exploring how AI can change the way researchers from academia and
