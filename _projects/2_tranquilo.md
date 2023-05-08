@@ -28,7 +28,7 @@ parallel programming.
 ## Derivative Free Trustregion Optimization
 
 Let's start with a short introduction to derivative free trustregion optimization. Instead
-of showing the math, I will try a visual explanation of how such an optimizer minimizes the function along with a verbal description.
+of showing the math, I will try a visual explanation of how such an optimizer minimizes the function along with a verbal description. Consider the objective function:
 
 $$f(x, y) = x^2 + y^2$$
 
@@ -43,10 +43,10 @@ surrogate model.
 
 This surrogate model is then minimized over the trustregion and the argmin of the
 surrogate model is the next candidate point. In the plot below, the blue point is the
-trustregion center, the red points are newly sampled point and the green star is the
+trustregion center, the red points are newly sampled points and the green star is the
 argmin of the surrogate model.
 
-<img src="/assets/img/tranquilo/animation_1.svg" class="rounded" width="500" />
+<img src="/assets/img/tranquilo/animation_1.svg" class="rounded" width="700" />
 
 The surrogate model does not only give us a candidate point but also a prediction for
 the improvement we can expect. After evaluating the objective function at the candidate
@@ -68,28 +68,28 @@ point us in the right direction.
 In our example, everything went well, we increased the radius and the next iteration
 looks as follows:
 
-<img src="/assets/img/tranquilo/animation_2.svg" class="rounded" width="500" />
+<img src="/assets/img/tranquilo/animation_2.svg" class="rounded" width="700" />
 
-Note that we did not have to sample any new points which would have lead to expensive
+Note that we did not have to sample any new points which would have led to expensive
 new function evaluations. There were enough points in the trustregion to fit a model and
 everything went well. Never change a winning team!
 
 This holds until iteration five where the picture looks as follows:
 
-<img src="/assets/img/tranquilo/animation_4.svg" class="rounded" width="500" />
+<img src="/assets/img/tranquilo/animation_4.svg" class="rounded" width="700" />
 
-We still have not sampled any new point (except for the candidate points of each
+We still have not sampled any new points (except for the candidate points of each
 iteration) but now we are at the optimum and the expected improvement of the next
 iteration is very small (in fact, almost zero). To make sure this does not come from
 the very bad sample quality (all points are almost on a line), we discard some of the
 existing points and add a new one:
 
-<img src="/assets/img/tranquilo/animation_5.svg" class="rounded" width="500" />
+<img src="/assets/img/tranquilo/animation_5.svg" class="rounded" width="700" />
 
 Since this still does not change the model, the algorithm has converged.
 
 Most real world problems take much longer to converge but the basic steps are the same.
-While different optimizers differ in the way the choose points and manage the radius,
+While different optimizers differ in the way they choose points and manage the radius,
 the common theme is to re-use points as efficiently as possible in order to save
 costly evaluations of the objective function.
 
@@ -112,7 +112,7 @@ point in order to average out the effects of noise.
 There are two strategies to utilize otherwise idle cores while running in parrallel:
 Line search and speculative sampling. Both can be seen best in a plot:
 
-<img src="/assets/img/tranquilo/line_and_speculative_points.svg" class="rounded" width="500" />
+<img src="/assets/img/tranquilo/line_and_speculative_points.svg" class="rounded" width="700" />
 
 The line search is triggered when the candidate point is at the border of the trustregion.
 In that case, the model might propose a search direction that would be valid even if
@@ -122,12 +122,12 @@ Speculative sampling asks the question: "Which points would we like to encounter
 next iteration, if the candidate was accepted". In an ideal case, this eliminates or
 reduces the need to sample points in the next iteration.
 
-We benchmark tranquilo against the very efficient serial optimizers DFO-LS on the
+We benchmark tranquilo against the very efficient serial optimizer DFO-LS on the
 Moré-Wild benchmark set which is standard in the literature. We vary the number of cores
 (batch size) between 2 and 8. The y-axis shows the share of solved problems, the
 x-axis a standardized computational budget in terms of batches.
 
-<img src="/assets/img/tranquilo/bld/figures/profile_plots/parallelization_ls.svg" class="rounded" width="500" />
+<img src="/assets/img/tranquilo/bld/figures/profile_plots/parallelization_ls.svg" class="rounded" width="700" />
 
 We see that using more cores can dramatically speed up the optimization. Of course,
 at the cost of using more resources.
@@ -151,13 +151,13 @@ unlucky in the sense that the noise draw at the highest point is negative and th
 the lowest point is positive, the model does a good job at leading us in the right
 direction.
 
-<img src="/assets/img/tranquilo/noise_plot_2.svg" class="rounded" width="500" />
+<img src="/assets/img/tranquilo/noise_plot_2.svg" class="rounded" width="700" />
 
 The only thing that changes in the second plot is that we are in a flat area of the
 objective function. The same noise draws now lead to a model that sends us straight away
 from the optimum.
 
-<img src="/assets/img/tranquilo/noise_plot_3.svg" class="rounded" width="500" />
+<img src="/assets/img/tranquilo/noise_plot_3.svg" class="rounded" width="700" />
 
 An optimal adaptive noise handling strategy would only do one evaluation per point in the
 first case and multiple evaluations in the second case.
@@ -171,7 +171,12 @@ those simmulated samples, optimize them and calculate:
 $$\rho_{noise} = \frac{\text{expected improvement from the simulated model}}{\text{actual improvement in the real model}}$$
 
 If $$\rho_{noise}$$ is large, we can reduce the number of evaluations per point. If it
-is small, we increase it. This is based on the fundamental insight that the random error
+is small, we increase it. Of course, we repeat the simulation multiple times and work
+with quantiles of the simulated $$\rho_{noise}$$. The mean would not be robust to
+outliers.
+
+
+This is based on the fundamental insight that the random error
 due to noise and the approximation error due to a too large trustregion are similar in
 the sense that they both can decrease the surrogate model's ability to predict good
 search directions but we should only take steps against these problems when it actually
@@ -187,7 +192,7 @@ of DFO-LS use 3, 5 and 10 evaluations at each point. While it is clear that more
 sophisticated sequences would improve DFO-LS's performance, there is no good way of
 coming up with the perfect sequence in practice.
 
-<img src="/assets/img/tranquilo/bld/figures/profile_plots/noisy_ls.svg" class="rounded" width="500" />
+<img src="/assets/img/tranquilo/bld/figures/profile_plots/noisy_ls.svg" class="rounded" width="700" />
 
 While no optimizer solves all problems within the computational budget of 5000 function
 evaluations, we can clearly see that tranquilo has an advantage in speed (it only uses
@@ -196,7 +201,7 @@ multiple evaluations if necessary) and robustness (It solves more problems).
 
 ## Some more details
 
-- Tranquilo works for scalar criterion function but also can exploit a non-linear
+- Tranquilo works for scalar objective functions but also can exploit a non-linear
 least-squares structure, i.e. an objective function of the form $$F(x) = \sum_if_i(x)^2$$
 and this leads to massive speed-ups. All benchmarks shown here compare optimizers that
 exploit this structure.
